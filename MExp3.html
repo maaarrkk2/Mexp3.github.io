@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payroll Calculator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: white;
+        }
+
+        .container {
+            display: flex;
+            width: 80%;
+        }
+
+        .form-container, .result-container {
+            flex: 1;
+            background: #222;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+            margin: 10px;
+        }
+
+        h2 {
+            color: orange;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background: #333;
+            color: white;
+        }
+
+        .button {
+            background-color: #00CFFF;
+            color: white;
+            border: none;
+            padding: 12px;
+            margin-top: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .button:hover {
+            background-color: #009ACD;
+        }
+    </style>
+    <script>
+        function calculatePayroll() {
+            let position = document.getElementById("position").value;
+            let hoursWorked = parseFloat(document.getElementById("hoursWorked").value);
+            let employeeName = document.getElementById("employeeName").value;
+            
+            let rate = {"Manager": 500, "Supervisor": 400, "Employee": 300}[position];
+            let grossPay = rate * hoursWorked;
+            
+            let bonusPercentage = grossPay >= 15000 ? 0.30 :
+                                 grossPay >= 10000 ? 0.25 :
+                                 grossPay >= 5000 ? 0.20 :
+                                 grossPay >= 3000 ? 0.15 : 0;
+            let bonus = grossPay * bonusPercentage;
+            
+            let sss = grossPay * 0.03;
+            let taxPercentage = grossPay >= 15000 ? 0.32 :
+                                grossPay >= 8000 ? 0.25 :
+                                grossPay >= 4000 ? 0.23 :
+                                grossPay >= 2000 ? 0.18 : 0;
+            let tax = grossPay * taxPercentage;
+            let pagibig = grossPay * 0.10;
+            let totalDeductions = sss + tax + pagibig;
+            let netPay = (grossPay + bonus) - totalDeductions;
+            
+            document.getElementById("output").innerHTML = `
+                <h2>Payroll Summary</h2>
+                <p><strong>Employee Name:</strong> ${employeeName}</p>
+                <p><strong>Position:</strong> ${position}</p>
+                <p><strong>Gross Pay:</strong> ₱${grossPay.toFixed(2)}</p>
+                <p><strong>Bonus:</strong> ₱${bonus.toFixed(2)}</p>
+                <p><strong>SSS:</strong> ₱${sss.toFixed(2)}</p>
+                <p><strong>Tax:</strong> ₱${tax.toFixed(2)}</p>
+                <p><strong>Pag-IBIG:</strong> ₱${pagibig.toFixed(2)}</p>
+                <p><strong>Total Deductions:</strong> ₱${totalDeductions.toFixed(2)}</p>
+                <p><strong>Net Pay:</strong> ₱${netPay.toFixed(2)}</p>
+            `;
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h2>Payroll Calculator</h2>
+            <label>Employee Name: <input type="text" id="employeeName"></label>
+            <label>Position:
+                <select id="position">
+                    <option value="Manager">Manager</option>
+                    <option value="Supervisor">Supervisor</option>
+                    <option value="Employee">Employee</option>
+                </select>
+            </label>
+            <label>Hours Worked: <input type="number" id="hoursWorked"></label>
+            <button class="button" onclick="calculatePayroll()">Compute Payroll</button>
+        </div>
+        <div class="result-container" id="output">
+            <h2>Payroll Summary</h2>
+            <p>Fill out the form to see the payroll summary here.</p>
+        </div>
+    </div>
+</body>
+</html>
